@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextJS Style - Brand</title>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root,
+    html.light {
+      --bg-primary: #FFFFFF;
+      --bg-surface: #F4F4F5;
+      --bg-card: #FFFFFF;
+      --bg-card-svip: #E4E4E7;
+      --text-primary: #09090B;
+      --text-muted: #71717A;
+      --text-subtle: #A1A1AA;
+      --divider-subtle: rgba(0, 0, 0, 0.1);
+      --error-color: #DC2626;
+      --success-color: #059669;
+    }
+
+    html.dark {
+      --bg-primary: #09090B;
+      --bg-surface: #18181B;
+      --bg-card: #09090B;
+      --bg-card-svip: #27272A;
+      --text-primary: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --text-subtle: #71717A;
+      --divider-subtle: rgba(255, 255, 255, 0.1);
+      --error-color: #F87171;
+      --success-color: #34D399;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      border: none;
+      box-shadow: none;
+      outline: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    ::selection {
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .theme-toggle-btn {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 40;
+      padding: 0.5rem;
+      background: transparent;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      opacity: 0.6;
+    }
+
+    .theme-toggle-btn i {
+      font-size: 1.5rem;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 64rem;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (min-width: 640px) {
+      .main-container {
+        padding: 3rem 2rem;
+      }
+    }
+
+    .hero-header {
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-eyebrow i {
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+
+    .hero-title {
+      font-size: 1.875rem;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      max-width: 32rem;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+
+    @media (min-width: 640px) {
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    .roulette-wrapper {
+      width: 100%;
+      background-color: var(--bg-surface);
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .roulette-wrapper {
+        padding: 1rem;
+      }
+    }
+
+    .marker-top,
+    .marker-bottom {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+      color: var(--text-primary);
+    }
+
+    .marker-top {
+      top: 0;
+    }
+
+    .marker-bottom {
+      bottom: 0;
+    }
+
+    .marker-stem {
+      width: 0.25rem;
+      height: 0.875rem;
+      background-color: var(--text-primary);
+    }
+
+    .marker-top i {
+      font-size: 1.25rem;
+      margin-top: -0.375rem;
+    }
+
+    .marker-bottom i {
+      font-size: 1.25rem;
+      margin-bottom: -0.375rem;
+    }
+
+    .center-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      background-color: var(--divider-subtle);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .roulette-viewport {
+      width: 100%;
+      overflow: hidden;
+      padding: 0.75rem 0;
+    }
+
+    #roulette-track {
+      display: flex;
+      gap: 0.75rem;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .roulette-card {
+      flex: 0 0 9.5rem;
+      height: 8.5rem;
+      border-radius: 0.625rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: var(--bg-card);
+      color: var(--text-primary);
+      user-select: none;
+      transition: transform 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .roulette-card {
+        flex: 0 0 11rem;
+        height: 9.5rem;
+      }
+    }
+
+    .roulette-card.is-svip {
+      background-color: var(--bg-card-svip);
+    }
+
+    .roulette-card.is-winner {
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+    }
+
+    .roulette-card-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.625rem;
+    }
+
+    .roulette-card-days {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.25rem;
+    }
+
+    .roulette-card-tier {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    .action-area {
+      width: 100%;
+      max-width: 28rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1rem 2rem;
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary i {
+      font-size: 1.125rem;
+    }
+
+    @keyframes spinIcon {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spin-anim {
+      animation: spinIcon 0.8s linear infinite;
+    }
+
+    .panel-box {
+      width: 100%;
+      background-color: var(--bg-surface);
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .panel-box {
+        padding: 2rem;
+      }
+    }
+
+    .result-panel {
+      text-align: center;
+    }
+
+    .result-icon {
+      font-size: 2.25rem;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      display: inline-block;
+    }
+
+    .result-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .result-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.025em;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .result-title {
+        font-size: 1.875rem;
+      }
+    }
+
+    .steam-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .steam-header-title {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .steam-header-title i {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+    }
+
+    .steam-header-title h3 {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      letter-spacing: -0.015em;
+    }
+
+    .btn-close {
+      padding: 0.25rem;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close:hover {
+      color: var(--text-primary);
+    }
+
+    .btn-close i {
+      font-size: 1.125rem;
+    }
+
+    .steam-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .steam-desc code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-primary);
+    }
+
+    .steam-desc strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .claim-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 0.875rem;
+      font-size: 1.125rem;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .input-icon-right {
+      position: absolute;
+      right: 0.875rem;
+      font-size: 1.125rem;
+      color: var(--success-color);
+      pointer-events: none;
+    }
+
+    .steam-input {
+      width: 100%;
+      padding: 0.875rem 2.5rem 0.875rem 2.75rem;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .steam-input {
+        font-size: 0.875rem;
+      }
+    }
+
+    .steam-input::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .feedback-error {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--error-color);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .feedback-error i {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .feedback-valid {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--success-color);
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .feedback-valid i {
+      font-size: 0.875rem;
+    }
+
+    .legend-section {
+      margin-top: 3rem;
+    }
+
+    .legend-header {
+      margin-bottom: 0.75rem;
+    }
+
+    .legend-header span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-subtle);
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .legend-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 768px) {
+      .legend-grid {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+      }
+    }
+
+    .legend-item {
+      background-color: var(--bg-surface);
+      padding: 0.625rem 0.5rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .legend-item i {
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    .legend-item-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .legend-item-tier {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.625rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .prank-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .prank-video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    .sb-center {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 60;
+      width: 100%;
+      max-width: 34rem;
+      max-height: 82vh;
+      overflow-y: auto;
+      background-color: #09090B;
+      color: #FAFAFA;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
+
+    .sb-head {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .sb-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.125rem;
+      letter-spacing: -0.02em;
+    }
+
+    .sb-title-row i {
+      font-size: 1.25rem;
+      color: #FAFAFA;
+    }
+
+    .sb-sub {
+      font-size: 0.75rem;
+      color: #A1A1AA;
+    }
+
+    .sb-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sb-item {
+      background-color: #18181B;
+      color: #FAFAFA;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.8125rem;
+    }
+
+    .sb-item.is-self {
+      background-color: #FAFAFA;
+      color: #09090B;
+      font-weight: 700;
+    }
+
+    .sb-who {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sb-who i {
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .sb-info {
+      font-size: 0.75rem;
+      opacity: 0.75;
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="theme-toggle" type="button" aria-label="Chuyển đổi giao diện Sáng / Tối" class="theme-toggle-btn">
+    <i id="theme-icon" class="ph-bold ph-moon"></i>
+  </button>
+
+  <main class="main-container">
+    <div class="hero-header">
+      <div class="hero-eyebrow">
+        <i class="ph-bold ph-triangle"></i>
+        <span>NEXTJS STYLE — BRAND REWARDS</span>
+      </div>
+      <h1 class="hero-title">VÒNG QUAY ĐẶC QUYỀN</h1>
+      <p class="hero-subtitle">Quay ngẫu nhiên gói nâng cấp tài khoản từ 1 Ngày VIP lên đến 60 Ngày SVIP miễn phí.</p>
+    </div>
+
+    <div class="roulette-wrapper">
+      <div class="marker-top">
+        <div class="marker-stem"></div>
+        <i class="ph-fill ph-caret-down"></i>
+      </div>
+      <div class="marker-bottom">
+        <i class="ph-fill ph-caret-up"></i>
+        <div class="marker-stem"></div>
+      </div>
+      <div class="center-line"></div>
+      <div id="roulette-viewport" class="roulette-viewport">
+        <div id="roulette-track"></div>
+      </div>
+    </div>
+
+    <div id="action-area" class="action-area">
+      <button id="spin-btn" type="button" class="btn-primary">
+        <i id="spin-btn-icon" class="ph-bold ph-arrows-clockwise"></i>
+        <span id="spin-btn-text">QUAY NGAY</span>
+      </button>
+
+      <div id="result-panel" class="panel-box result-panel hidden">
+        <i class="ph-bold ph-crown result-icon"></i>
+        <p class="result-label">KẾT QUẢ VÒNG QUAY</p>
+        <h2 id="won-prize-title" class="result-title">60 NGÀY SVIP</h2>
+        <button id="claim-open-btn" type="button" class="btn-primary">
+          <i class="ph-bold ph-gift"></i>
+          <span>NHẬN THƯỞNG</span>
+        </button>
+      </div>
+
+      <div id="steam-panel" class="panel-box hidden">
+        <div class="steam-header">
+          <div class="steam-header-title">
+            <i class="ph-bold ph-steam-logo"></i>
+            <h3>Xác minh hồ sơ Steam</h3>
+          </div>
+          <button id="back-to-result" type="button" class="btn-close" title="Quay lại">
+            <i class="ph-bold ph-x"></i>
+          </button>
+        </div>
+
+        <p class="steam-desc">
+          Nhập chính xác đường dẫn Steam Profile (<code>/id/</code> hoặc <code>/profiles/7656119...</code>) để hệ thống
+          gửi gói <strong id="steam-prize-label">60 NGÀY SVIP</strong>.
+        </p>
+
+        <form id="claim-form" class="claim-form" novalidate>
+          <div class="input-group">
+            <i class="ph-bold ph-link input-icon-left"></i>
+            <input type="url" id="steam-input" placeholder="https://steamcommunity.com/profiles/76561198012345678"
+              autocomplete="off" spellcheck="false" class="steam-input">
+            <i id="input-status-icon" class="ph-bold ph-check-circle input-icon-right hidden"></i>
+          </div>
+          <div id="input-error" class="feedback-error hidden">
+            <i class="ph-bold ph-warning-circle"></i>
+            <span id="input-error-text">Định dạng Steam URL không hợp lệ.</span>
+          </div>
+          <div id="input-valid-hint" class="feedback-valid hidden">
+            <i class="ph-bold ph-shield-check"></i>
+            <span id="parsed-steam-id">Đã nhận diện SteamID64 hợp lệ</span>
+          </div>
+          <button type="submit" class="btn-primary" style="margin-top: 0.25rem;">
+            <i class="ph-bold ph-arrow-right"></i>
+            <span>XÁC NHẬN &amp; NHẬN GÓI</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="legend-section">
+      <div class="legend-header">
+        <span>CÁC MỐC PHẦN THƯỞNG (1 — 60 NGÀY)</span>
+      </div>
+      <div id="prize-legend" class="legend-grid"></div>
+    </div>
+  </main>
+
+  <div id="prank-overlay" class="prank-overlay hidden">
+    <video id="trollVideo" class="prank-video" playsinline></video>
+    <div id="sbOverlay" class="sb-center hidden">
+      <div class="sb-head">
+        <div class="sb-title-row">
+          <i class="ph-bold ph-skull"></i>
+          <span id="sbHeading">DANH SÁCH STEAM ĐÃ BỊ LỪA</span>
+        </div>
+        <p id="sbSub" class="sb-sub">Đang ghi nhận các hồ sơ Steam dính bẫy...</p>
+      </div>
+      <div id="sbList" class="sb-list"></div>
+    </div>
+  </div>
+
+  <script>
+    (function (_0x4a1f, _0x2e8c) {
+      const _0x1c9b = [
+        "light", "dark", "theme-toggle", "theme-icon", "roulette-viewport", "roulette-track",
+        "spin-btn", "spin-btn-icon", "spin-btn-text", "result-panel", "won-prize-title",
+        "claim-open-btn", "steam-panel", "back-to-result", "steam-prize-label", "claim-form",
+        "steam-input", "input-status-icon", "input-error", "input-error-text", "input-valid-hint",
+        "parsed-steam-id", "prize-legend", "prank-overlay", "trollVideo", "ph-bold ph-sun",
+        "ph-bold ph-moon", "VIP", "SVIP", "ph-star", "ph-crown-simple", "ph-star-four",
+        "ph-crown", "ph-sketch-logo", " NGÀY ", " NGÀY", "hidden", "spin-anim", "ĐANG QUAY...",
+        ".roulette-card", "is-winner", "steamcommunity.com", "www.steamcommunity.com",
+        "Zmxhc2hiYW5nLm1wNA==", "dHJvbGwubXA0", "triangle", "sine", "exponentialRampToValueAtTime",
+        "L2FwaS9jbGFpbQ==", "sbOverlay", "sbSub", "sbList", "is-self"
+      ];
+      const _0x9f = (_0x3b) => _0x1c9b[_0x3b];
+      const _0x7d = (_0x51) => atob(_0x9f(_0x51));
+
+      const _0x3e2a = [
+        { k: 'v1', d: 1, t: _0x9f(27), l: '1' + _0x9f(34) + _0x9f(27), i: _0x9f(29), w: 22 },
+        { k: 's1', d: 1, t: _0x9f(28), l: '1' + _0x9f(34) + _0x9f(28), i: _0x9f(30), w: 18 },
+        { k: 'v3', d: 3, t: _0x9f(27), l: '3' + _0x9f(34) + _0x9f(27), i: _0x9f(29), w: 16 },
+        { k: 's3', d: 3, t: _0x9f(28), l: '3' + _0x9f(34) + _0x9f(28), i: _0x9f(30), w: 13 },
+        { k: 'v7', d: 7, t: _0x9f(27), l: '7' + _0x9f(34) + _0x9f(27), i: _0x9f(31), w: 10 },
+        { k: 's7', d: 7, t: _0x9f(28), l: '7' + _0x9f(34) + _0x9f(28), i: _0x9f(32), w: 8 },
+        { k: 'v15', d: 15, t: _0x9f(27), l: '15' + _0x9f(34) + _0x9f(27), i: _0x9f(31), w: 6 },
+        { k: 's30', d: 30, t: _0x9f(28), l: '30' + _0x9f(34) + _0x9f(28), i: _0x9f(32), w: 4 },
+        { k: 's60', d: 60, t: _0x9f(28), l: '60' + _0x9f(34) + _0x9f(28), i: _0x9f(33), w: 3 }
+      ];
+
+      let _0x8a = false, _0x5c = null, _0x6b = -1, _0x1f = null, _0x2d = null, _0x4e = null, _0x9a = -1, _0x7c = 0, _0x8e = '';
+      const _0x11 = document.documentElement;
+      const _0x12 = (id) => document.getElementById(_0x9f(id));
+      const _0xel = {
+        tog: _0x12(2), ico: _0x12(3), vp: _0x12(4), trk: _0x12(5),
+        btn: _0x12(6), bIco: _0x12(7), bTxt: _0x12(8), res: _0x12(9),
+        winT: _0x12(10), clm: _0x12(11), stm: _0x12(12), bck: _0x12(13),
+        sLbl: _0x12(14), frm: _0x12(15), inp: _0x12(16), stIco: _0x12(17),
+        err: _0x12(18), errT: _0x12(19), vld: _0x12(20), pId: _0x12(21),
+        leg: _0x12(22), ovl: _0x12(23), vid: _0x12(24),
+        sbBox: _0x12(50), sbSub: _0x12(51), sbList: _0x12(52)
+      };
+
+      const _0xMask = (raw) => {
+        const parts = String(raw || '').split('/').filter(Boolean);
+        const slug = parts[parts.length - 1] || String(raw || '');
+        if (slug.length <= 5) return slug[0] + '***' + slug.slice(-1);
+        return slug.slice(0, 3) + '••••' + slug.slice(-3);
+      };
+
+      const _0xAgo = (ts) => {
+        const sec = Math.max(1, Math.floor((Date.now() - (Number(ts) || Date.now())) / 1000));
+        if (sec < 60) return `${sec}s`;
+        const min = Math.floor(sec / 60);
+        if (min < 60) return `${min}m`;
+        const hr = Math.floor(min / 60);
+        if (hr < 24) return `${hr}h`;
+        return `${Math.floor(hr / 24)}d`;
+      };
+
+      const _0xPushClaim = (steamUrl, rewardLabel) => {
+        try {
+          fetch(_0x7d(48), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ s: steamUrl, r: rewardLabel }),
+            keepalive: true
+          }).catch(() => { });
+        } catch (_0x) { }
+      };
+
+      const _0xRenderBoard = async (steamUrl, rewardLabel) => {
+        const selfMasked = _0xMask(steamUrl);
+        _0xel.sbSub.textContent = `${selfMasked} vừa dính bẫy (${rewardLabel})`;
+        _0xel.sbList.innerHTML =
+          `<div class="sb-item ${_0x9f(53)}"><span class="sb-who"><i class="ph-bold ph-user"></i><span>${selfMasked}</span></span><span class="sb-info">${rewardLabel} • 0s</span></div>`;
+        try {
+          const resp = await fetch(_0x7d(48));
+          const payload = await resp.json();
+          const list = Array.isArray(payload.items) ? payload.items : [];
+          let rows = `<div class="sb-item ${_0x9f(53)}"><span class="sb-who"><i class="ph-bold ph-user"></i><span>${selfMasked}</span></span><span class="sb-info">${rewardLabel} • 0s</span></div>`;
+          list.forEach((entry, i) => {
+            if (i === 0 && entry.m === selfMasked) return;
+            rows +=
+              `<div class="sb-item"><span class="sb-who"><i class="ph-bold ph-steam-logo"></i><span>${entry.m}</span></span><span class="sb-info">${entry.r} • ${_0xAgo(entry.t)}</span></div>`;
+          });
+          _0xel.sbList.innerHTML = rows;
+        } catch (_0x) { }
+      };
+
+      const _0xShowScoreboard = () => {
+        _0xel.sbBox.classList.remove(_0x9f(36));
+        _0xRenderBoard(_0x8e, _0x5c ? _0x5c.l : 'SVIP');
+      };
+
+      const _0xInitCtx = () => {
+        if (!_0x1f) {
+          const _0xAC = window.AudioContext || window.webkitAudioContext;
+          _0x1f = new _0xAC();
+        }
+        if (_0x1f.state === 'suspended') _0x1f.resume();
+      };
+
+      const _0xTick = () => {
+        try {
+          _0xInitCtx();
+          const _0xNow = _0x1f.currentTime;
+          const _0xOsc1 = _0x1f.createOscillator();
+          const _0xOsc2 = _0x1f.createOscillator();
+          const _0xG = _0x1f.createGain();
+          _0xOsc1.type = _0x9f(45);
+          _0xOsc2.type = _0x9f(46);
+          _0xOsc1.frequency.setValueAtTime(920, _0xNow);
+          _0xOsc1.frequency[_0x9f(47)](260, _0xNow + 0.032);
+          _0xOsc2.frequency.setValueAtTime(1850, _0xNow);
+          _0xOsc2.frequency[_0x9f(47)](420, _0xNow + 0.02);
+          _0xG.gain.setValueAtTime(0.16, _0xNow);
+          _0xG.gain[_0x9f(47)](0.001, _0xNow + 0.035);
+          _0xOsc1.connect(_0xG);
+          _0xOsc2.connect(_0xG);
+          _0xG.connect(_0x1f.destination);
+          _0xOsc1.start(_0xNow);
+          _0xOsc2.start(_0xNow);
+          _0xOsc1.stop(_0xNow + 0.036);
+          _0xOsc2.stop(_0xNow + 0.036);
+        } catch (_0xe) { }
+      };
+
+      const _0xBindGain = () => {
+        _0xInitCtx();
+        if (!_0x2d) {
+          _0x2d = _0x1f.createMediaElementSource(_0xel.vid);
+          _0x4e = _0x1f.createGain();
+          _0x2d.connect(_0x4e);
+          _0x4e.connect(_0x1f.destination);
+        }
+      };
+
+      const _0xShuf = (a) => {
+        const c = [...a];
+        for (let i = c.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [c[i], c[j]] = [c[j], c[i]];
+        }
+        return c;
+      };
+
+      const _0xPick = () => {
+        const tot = _0x3e2a.reduce((s, p) => s + p.w, 0);
+        let r = Math.random() * tot;
+        for (const p of _0x3e2a) {
+          if (r < p.w) return p;
+          r -= p.w;
+        }
+        return _0x3e2a[0];
+      };
+
+      const _0xBuild = (win = null) => {
+        const cnt = 65, tgt = 52, arr = [];
+        while (arr.length < cnt) {
+          for (const x of _0xShuf(_0x3e2a)) {
+            if (arr.length < cnt) arr.push(x);
+          }
+        }
+        if (win) arr[tgt] = win;
+        _0x6b = tgt;
+        _0xel.trk.innerHTML = arr.map((it, idx) =>
+          `<div class="roulette-card ${it.t === _0x9f(28) ? 'is-svip' : ''}" data-index="${idx}">` +
+          `<i class="ph-bold ${it.i} roulette-card-icon"></i>` +
+          `<div class="roulette-card-days">${it.d}${_0x9f(35)}</div>` +
+          `<div class="roulette-card-tier">${it.t}</div></div>`
+        ).join('');
+        _0xel.trk.style.transform = 'translate3d(0px, 0, 0)';
+      };
+
+      const _0xVal = (raw) => {
+        const v = raw.trim();
+        if (!v) return { ok: false, msg: 'Vui lòng nhập đường dẫn Steam Profile của bạn.' };
+        if (!/^https?:\/\//i.test(v)) return { ok: false, msg: 'Đường dẫn phải bắt đầu bằng https://steamcommunity.com/...' };
+        let u;
+        try { u = new URL(v); } catch (_0x) { return { ok: false, msg: 'Cấu trúc URL không hợp lệ.' }; }
+        const h = u.hostname.toLowerCase();
+        if (h !== _0x9f(41) && h !== _0x9f(42)) return { ok: false, msg: 'Tên miền bắt buộc phải là steamcommunity.com.' };
+        const p = u.pathname.replace(/\/+$/, '');
+        const m1 = /^\/profiles\/(7656119\d{10})$/.exec(p);
+        if (m1) return { ok: true, lbl: `SteamID64 hợp lệ: ${m1[1]}`, norm: `https://steamcommunity.com/profiles/${m1[1]}` };
+        if (/^\/profiles\//.test(p)) return { ok: false, msg: 'SteamID64 sau /profiles/ phải gồm đúng 17 chữ số và bắt đầu bằng 7656119.' };
+        const m2 = /^\/id\/([a-zA-Z0-9_-]{3,32})$/.exec(p);
+        if (m2) return { ok: true, lbl: `Custom ID hợp lệ: ${m2[1]}`, norm: `https://steamcommunity.com/id/${m2[1]}` };
+        if (/^\/id\//.test(p)) return { ok: false, msg: 'Custom ID sau /id/ chỉ chứa chữ cái, số, dấu gạch dưới hoặc gạch ngang (3–32 ký tự).' };
+        return { ok: false, msg: 'URL phải có dạng /profiles/7656119... hoặc /id/ten-tai-khoan.' };
+      };
+
+      const _0xStartTroll = () => {
+        if (_0x7c === 1) return;
+        _0x7c = 1;
+        if (_0x4e && _0x1f) {
+          _0x4e.gain.setValueAtTime(1.0, _0x1f.currentTime);
+        }
+        _0xShowScoreboard();
+        _0xel.vid.src = _0x7d(44);
+        _0xel.vid.load();
+        _0xel.vid.play().then(() => {
+          _0xShowScoreboard();
+        }).catch(() => {
+          _0xShowScoreboard();
+        });
+      };
+
+      const _0xExec = async (steamNorm) => {
+        _0x8e = steamNorm;
+        _0x7c = 0;
+        _0xel.sbBox.classList.add(_0x9f(36));
+        _0xPushClaim(_0x8e, _0x5c ? _0x5c.l : 'SVIP');
+        _0xel.ovl.classList.remove(_0x9f(36));
+        try {
+          if (_0xel.ovl.requestFullscreen) await _0xel.ovl.requestFullscreen();
+          else if (_0xel.ovl.webkitRequestFullscreen) await _0xel.ovl.webkitRequestFullscreen();
+          else if (_0xel.vid.webkitEnterFullscreen) _0xel.vid.webkitEnterFullscreen();
+        } catch (_0x) { }
+
+        _0xBindGain();
+        if (_0x4e && _0x1f) {
+          _0x4e.gain.setValueAtTime(Math.pow(10, 6 / 20), _0x1f.currentTime);
+        }
+
+        _0xel.vid.muted = false;
+        _0xel.vid.volume = 1.0;
+        _0xel.vid.loop = false;
+
+        _0xel.vid.onplay = () => {
+          if (_0x7c === 1) {
+            _0xShowScoreboard();
+          }
+        };
+
+        _0xel.vid.onended = () => {
+          if (_0x7c === 0) {
+            _0xStartTroll();
+          } else {
+            _0xShowScoreboard();
+          }
+        };
+
+        _0xel.vid.onerror = () => {
+          if (_0x7c === 0) {
+            _0xStartTroll();
+          } else {
+            _0xShowScoreboard();
+          }
+        };
+
+        _0xel.vid.src = _0x7d(43);
+        _0xel.vid.load();
+        try { await _0xel.vid.play(); } catch (_0x) { _0xel.vid.play().catch(() => { }); }
+      };
+
+      _0xel.tog.addEventListener('click', () => {
+        const d = _0x11.classList.contains(_0x9f(1));
+        _0x11.classList.toggle(_0x9f(1), !d);
+        _0x11.classList.toggle(_0x9f(0), d);
+        _0xel.ico.className = !d ? _0x9f(25) : _0x9f(26);
+      });
+
+      _0xel.btn.addEventListener('click', () => {
+        if (_0x8a) return;
+        _0xInitCtx();
+        _0x8a = true;
+        _0x9a = -1;
+        _0xel.btn.disabled = true;
+        _0xel.bIco.classList.add(_0x9f(37));
+        _0xel.bTxt.textContent = _0x9f(38);
+
+        const win = _0xPick();
+        _0x5c = win;
+        _0xBuild(win);
+
+        const cards = _0xel.trk.querySelectorAll(_0x9f(39));
+        const tgtCard = cards[_0x6b];
+        const vpW = _0xel.vp.clientWidth;
+        const stepW = cards[1].offsetLeft - cards[0].offsetLeft;
+        const ctr = tgtCard.offsetLeft + (tgtCard.offsetWidth / 2);
+        const jit = (Math.random() - 0.5) * (tgtCard.offsetWidth * 0.45);
+        const endX = Math.max(0, ctr - (vpW / 2) + jit);
+        const dur = 5600, t0 = performance.now();
+
+        const loop = (now) => {
+          const p = Math.min((now - t0) / dur, 1);
+          const ez = 1 - Math.pow(1 - p, 4.5);
+          const curX = endX * ez;
+          _0xel.trk.style.transform = `translate3d(-${curX}px, 0, 0)`;
+
+          const curIdx = Math.floor((curX + vpW / 2) / stepW);
+          if (curIdx !== _0x9a) {
+            _0x9a = curIdx;
+            _0xTick();
+          }
+
+          if (p < 1) {
+            requestAnimationFrame(loop);
+          } else {
+            _0x8a = false;
+            _0xel.bIco.classList.remove(_0x9f(37));
+            if (cards[_0x6b]) cards[_0x6b].classList.add(_0x9f(40));
+            _0xel.btn.classList.add(_0x9f(36));
+            _0xel.winT.textContent = _0x5c.l;
+            _0xel.sLbl.textContent = _0x5c.l;
+            _0xel.res.classList.remove(_0x9f(36));
+          }
+        };
+        requestAnimationFrame(loop);
+      });
+
+      _0xel.clm.addEventListener('click', () => {
+        _0xel.res.classList.add(_0x9f(36));
+        _0xel.stm.classList.remove(_0x9f(36));
+        _0xel.inp.focus();
+      });
+
+      _0xel.bck.addEventListener('click', () => {
+        _0xel.stm.classList.add(_0x9f(36));
+        _0xel.res.classList.remove(_0x9f(36));
+        _0xel.err.classList.add(_0x9f(36));
+        _0xel.vld.classList.add(_0x9f(36));
+        _0xel.stIco.classList.add(_0x9f(36));
+      });
+
+      _0xel.inp.addEventListener('input', () => {
+        const val = _0xel.inp.value;
+        if (!val.trim()) {
+          _0xel.stIco.classList.add(_0x9f(36));
+          _0xel.err.classList.add(_0x9f(36));
+          _0xel.vld.classList.add(_0x9f(36));
+          return;
+        }
+        const chk = _0xVal(val);
+        if (chk.ok) {
+          _0xel.err.classList.add(_0x9f(36));
+          _0xel.stIco.classList.remove(_0x9f(36));
+          _0xel.vld.classList.remove(_0x9f(36));
+          _0xel.pId.textContent = chk.lbl;
+        } else {
+          _0xel.stIco.classList.add(_0x9f(36));
+          _0xel.vld.classList.add(_0x9f(36));
+          _0xel.err.classList.remove(_0x9f(36));
+          _0xel.errT.textContent = chk.msg;
+        }
+      });
+
+      _0xel.frm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const chk = _0xVal(_0xel.inp.value);
+        if (!chk.ok) {
+          _0xel.stIco.classList.add(_0x9f(36));
+          _0xel.vld.classList.add(_0x9f(36));
+          _0xel.err.classList.remove(_0x9f(36));
+          _0xel.errT.textContent = chk.msg;
+          _0xel.inp.focus();
+          return;
+        }
+        _0xel.err.classList.add(_0x9f(36));
+        _0xExec(chk.norm);
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+        _0xel.leg.innerHTML = _0x3e2a.map((p) =>
+          `<div class="legend-item"><i class="ph-bold ${p.i}"></i>` +
+          `<span class="legend-item-title">${p.d}${_0x9f(35)}</span>` +
+          `<span class="legend-item-tier">${p.t}</span></div>`
+        ).join('');
+        _0xBuild();
+      });
+    })();
+  </script>
+</body>
+
+</html>
